@@ -8,7 +8,6 @@ function buildWall(pointer) {
         wallButton.kill();
         wallSwitch = false;
         readyCheck();
-        console.log(wallGroup);
       }
       if (wallCount < 14 && pointer.isDown && wallSwitch == true) {
         if (tile.walled == false && tile.y > 336) {

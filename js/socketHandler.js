@@ -13,7 +13,7 @@ function readyAction() {
         socket.emit('walls', {x: wall.x, y: wall.y});
     })
 
-    this.ennemyInit();
+    ennemyInit();
     ready = true;
     ourFlag = this.add.sprite(240, 640, 'flags');
     ourFlag.scale.setTo(2);
