@@ -19,6 +19,7 @@
     <script src="js/entites/Tower.js"></script>
     <script src="js/entites/Ennemy.js"></script>
     <script src="js/entites/walls.js"></script>
+    <script src="js/socketHandler.js"></script>
     <script src="js/entites/Map.js"></script>
     <script src="js/states/Game.js"></script>
 
@@ -37,7 +38,7 @@
       var socket = io.connect('http://192.168.0.12:3000');
       var gameId;
       // Phaser.js
-      paper.game = new Phaser.Game(480, 672, Phaser.CANVAS, '');
+      paper.game = new Phaser.Game(480, 672, Phaser.CANVAS, '', null, false, false);
       paper.game.state.add('Boot', paper.Boot);
       paper.game.state.add('Preload', paper.Preload);
       paper.game.state.add('Menu', paper.Menu);

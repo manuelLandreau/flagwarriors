@@ -1,10 +1,9 @@
-var Caracter = function(x, y)
+var Caracter = function(x, y, name)
 {
   Phaser.Sprite.call(this, paper.game, x, y, 'warrior');
   paper.game.physics.arcade.enable(this);
   this.inputEnabled = true;
   this.scale.setTo(2);
-  this.smoothed = false;
   this.input.priorityID = 1;
   this.anchor.setTo(0.5, 0.2);
   this.selected = false;
@@ -18,6 +17,8 @@ var Caracter = function(x, y)
   this.animations.add('north', [5,6,7,8,9]);
   this.animations.add('east', [10,11,12,13,14]);
   this.animations.add('west', [15,16,17,18,19]);
+  this.animations.add('attack', [20,21,22,23,24]);
+  this.name = name;
 
   this.select = function()
   {
@@ -36,7 +37,7 @@ var Caracter = function(x, y)
     }
   }, this);
 
-  this.move = function(number)
+  this.move = function()
   {
     if (paper.game.physics.arcade.distanceToXY(this, this.newPosX, this.newPosY) > 2)
     {
@@ -62,37 +63,37 @@ var Caracter = function(x, y)
 
             if (path[0].x > path[1].x && path[0] > path[1].y) {
               this.animations.play('west', 10, false);
-              anim = 'west';
+              anim = 'east';
             }
             else if (path[0].x > path[1].x && path[0].y < path[1].y) {
-              this.animations.play('nort', 10, false);
-              anim = 'north';
+              this.animations.play('north', 10, false);
+              anim = 'south';
             }
             else if (path[0].x < path[1].x && path[0].y < path[1].y) {
-              this.animations.play('nort', 10, false);
-              anim = 'north';
+              this.animations.play('north', 10, false);
+              anim = 'south';
             }
             else if (path[0].x < path[1].x && path[0].y > path[1].y) {
               this.animations.play('east', 10, false);
-              anim = 'east';
+              anim = 'west';
             }
             else if (path[0].x == path[1].x && path[0].y > path[1].y) {
               this.animations.play('north', 10, false);
-              anim = 'north';
+              anim = 'south';
             }
             else if (path[0].x == path[1].x && path[0].y < path[1].y) {
               this.animations.play('south', 10, false);
-              anim = 'south';
+              anim = 'north';
             }
             else if (path[0].x > path[1].x && path[0].y == path[1].y) {
               this.animations.play('east', 10, false);
-              anim = 'east';
+              anim = 'west';
             }
             else if (path[0].x < path[1].x && path[0].y == path[1].y) {
               this.animations.play('west', 10, false);
-              anim = 'west';
+              anim = 'east';
             }
-            socket.emit('is_moving', {number: number, x: this.x, y: this.y, anim: anim});
+            socket.emit('is_moving', {name: this.name, x: this.x, y: this.y, anim: anim});
             allies.sort('x', Phaser.Group.SORT_ACENDING);
             allies.sort('y', Phaser.Group.SORT_ACENDING);
           }
@@ -111,10 +112,19 @@ var Caracter = function(x, y)
   this.attack = function()
   {
     ennemies.forEach(function(ennemy) {
-      if (paper.game.physics.arcade.distanceBetween(this, ennemy) < 50) {
-          ennemy.damage(paper.game.rnd.integerInRange(0.2, 0.5));
+      if (paper.game.physics.arcade.distanceBetween(this, ennemy) < 16) {
+        socket.emit('attack', {name: this.name, damage: paper.game.rnd.integerInRange(0.2, 0.5)});
+        this.animations.play('attack');
       }
     }, this);
+  };
+
+  this.damage = function(lp)
+  {
+    this.health -= lp;
+    if (this.health < 0)
+      this.kill();
+    socket.emit('death', {name: this.name});
   };
 }
 Caracter.prototype = Object.create(Phaser.Sprite.prototype);

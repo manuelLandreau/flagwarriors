@@ -1,5 +1,3 @@
-var wallCount = 0;
-
 function buildWall(pointer) {
 
   tileGroup.forEach(function (tile)
@@ -9,6 +7,8 @@ function buildWall(pointer) {
       if (wallCount > 13) {
         wallButton.kill();
         wallSwitch = false;
+        readyCheck();
+        console.log(wallGroup);
       }
       if (wallCount < 14 && pointer.isDown && wallSwitch == true) {
         if (tile.walled == false && tile.y > 336) {

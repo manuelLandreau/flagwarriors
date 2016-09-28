@@ -43,8 +43,16 @@ io.on('connection', function(socket)
         socket.broadcast.emit('ready', data);
     });
 
+    socket.on('walls', function(data) {
+        socket.broadcast.emit('walls', data);
+    });
+
     socket.on('is_moving', function(data) {
         socket.broadcast.emit('is_moving', data);
+    });
+
+    socket.on('attack', function(data) {
+        socket.broadcast.emit('attack', data);
     });
 
     // when the user disconnects.. perform this

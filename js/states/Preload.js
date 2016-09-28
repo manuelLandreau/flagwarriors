@@ -21,6 +21,7 @@ paper.Preload.prototype = {
     this.load.image('towerButton', 'assets/towerbutton.png');
     this.load.image('tree', 'assets/tree.png');
     this.load.spritesheet('warrior', 'assets/warrior.png', 32, 32);
+    this.load.spritesheet('flags', 'assets/flags.png', 16, 16);
     this.load.image('walle', 'assets/wall2.png');
     this.load.image('tile', 'assets/empty.png');
     this.load.image('tower', 'assets/tower.png');

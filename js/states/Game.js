@@ -1,7 +1,7 @@
 var map, newPos, allies, wallGroup, tileGroup, arrowGroup, alliesTower, wallSwitch = false;
 var i = 1, j = 1;
 var caracter1, caracter2, caracter3, caracter4, caracter5, ennemy1, tower1, tower2;
-var ready = false, ennemyInit= false;
+var ready = false, ennemyInit= false, ourFlag, theirFlag, wallCount = 0;;
 
 paper.Game = function(){};
 
@@ -31,10 +31,9 @@ paper.Game.prototype = {
         //buttons
         warriorButton = this.add.image(-16, 630, 'warrior');
         warriorButton.scale.setTo(2);
-        warriorButton.smoothed = false;
         wallButton = this.add.button(33, 644, 'walle', actionWall, this, 1, 0, 2);
         towerButton = this.add.image(70, 644, 'tower');
-        readyButton = this.add.button(448, 640, 'ready', readyAction, this, 1, 0, 2);
+
         //button drag
         warriorDrag = this.add.image(16, 660, 'warrior');
         warriorDrag.anchor.setTo(0.5, 0.5);
@@ -50,9 +49,6 @@ paper.Game.prototype = {
         towerDrag.events.onDragStart.add(unselect, this);
         towerDrag.events.onDragStop.add(addTower, this);
 
-        var ennemy2;
-        ennemy2 = new Ennemy(200, 300, this);
-
         function unselect()
         {
             allies.forEach(function(caracter) {
@@ -64,27 +60,27 @@ paper.Game.prototype = {
         {
             switch(i) {
                 case 1:
-                    caracter1 = new Caracter(Math.floor(pointer.x / 32)*32+16, Math.floor(pointer.y / 32)*32+16);
+                    caracter1 = new Caracter(Math.floor(pointer.x / 32)*32+16, Math.floor(pointer.y / 32)*32+16, '1');
                     caracter1.selected = true;
                     allies.add(caracter1);
                     break;
                 case 2:
-                    caracter2 = new Caracter(Math.floor(pointer.x / 32)*32+16, Math.floor(pointer.y / 32)*32+16);
+                    caracter2 = new Caracter(Math.floor(pointer.x / 32)*32+16, Math.floor(pointer.y / 32)*32+16, '2');
                     caracter2.selected = true;
                     allies.add(caracter2);
                     break;
                 case 3:
-                    caracter3 = new Caracter(Math.floor(pointer.x / 32)*32+16, Math.floor(pointer.y / 32)*32+16);
+                    caracter3 = new Caracter(Math.floor(pointer.x / 32)*32+16, Math.floor(pointer.y / 32)*32+16, '3');
                     caracter3.selected = true;
                     allies.add(caracter3);
                     break;
                 case 4:
-                    caracter4 = new Caracter(Math.floor(pointer.x / 32)*32+16, Math.floor(pointer.y / 32)*32+16);
+                    caracter4 = new Caracter(Math.floor(pointer.x / 32)*32+16, Math.floor(pointer.y / 32)*32+16, '4');
                     caracter4.selected = true;
                     allies.add(caracter4);
                     break;
                 case 5:
-                    caracter5 = new Caracter(Math.floor(pointer.x / 32)*32+16, Math.floor(pointer.y / 32)*32+16);
+                    caracter5 = new Caracter(Math.floor(pointer.x / 32)*32+16, Math.floor(pointer.y / 32)*32+16, '5');
                     caracter5.selected = true;
                     allies.add(caracter5);
                     break;
@@ -95,6 +91,7 @@ paper.Game.prototype = {
             if (i==6) {
                 warriorDrag.kill();
                 warriorButton.kill();
+                readyCheck();
             }
         }
 
@@ -102,7 +99,7 @@ paper.Game.prototype = {
         {
             switch(j) {
                 case 1:
-                    tower1 = new Tower(Math.floor(pointer.x / 32)*32, Math.floor(pointer.y / 32)*32-16);
+                    tower1 = new Tower(Math.floor(pointer.x / 32)*32, Math.floor(pointer.y / 32)*32-16, '1', ennemies);
                     this.physics.arcade.enable(tower1);
                     allies.add(tower1);
                     allies.sort('x', Phaser.Group.SORT_ACENDING);
@@ -112,7 +109,7 @@ paper.Game.prototype = {
                     tower1.attack();
                     break;
                 case 2:
-                    tower2 = new Tower(Math.floor(pointer.x / 32)*32, Math.floor(pointer.y / 32)*32-16);
+                    tower2 = new Tower(Math.floor(pointer.x / 32)*32, Math.floor(pointer.y / 32)*32-16, '2', ennemies);
                     this.physics.arcade.enable(tower2);
                     allies.add(tower2);
                     allies.sort('x', Phaser.Group.SORT_ACENDING);
@@ -125,6 +122,7 @@ paper.Game.prototype = {
             towerDrag.x = 94;
             towerDrag.y = 684;
             if (j == 3) {
+                readyCheck();
                 towerDrag.kill();
                 towerButton.kill();
             }
@@ -135,60 +133,32 @@ paper.Game.prototype = {
             wallSwitch = !wallSwitch;
         }
 
-        this.ennemyInit = function() {
-            socket.on('is_moving', function(data) {
-                window['ennemy' + data.number].x = 480 - data.x;
-                window['ennemy' + data.number].y = 672 - data.y;
-                window['ennemy' + data.number].animations.play(data.anim, 10, false);
-            });
-        }
-
-        socket.on('ready', function(data) {
-            ennemy1 = new Ennemy(480 - data.caracter1x, 672 - data.caracter1y, this);
-            ennemies.add(ennemy1);
-            ennemy2 = new Ennemy(480 - data.caracter2x, 672 - data.caracter2y, this);
-            ennemies.add(ennemy2);
-            ennemy3 = new Ennemy(480 - data.caracter3x, 672 - data.caracter3y, this);
-            ennemies.add(ennemy3);
-            ennemy4 = new Ennemy(480 - data.caracter4x, 672 - data.caracter4y, this);
-            ennemies.add(ennemy4);
-            ennemy5 = new Ennemy(480 - data.caracter5x, 672 - data.caracter5y, this);
-            ennemies.add(ennemy5);
-            ennemyInit = true;
-            this.ennemyInit();
-        }.bind(this));
-
-        function readyAction() {
-            socket.emit('ready', {
-                caracter1x: caracter1.x, caracter1y: caracter1.y,
-                caracter2x: caracter2.x, caracter2y: caracter2.y,
-                caracter3x: caracter3.x, caracter3y: caracter3.y,
-                caracter4x: caracter4.x, caracter4y: caracter4.y,
-                caracter5x: caracter5.x, caracter5y: caracter5.y
-            });
-            ready = true;
-        }
+        readyCheck = function() {
+            if (i > 4, j > 2, wallCount > 13)
+                readyButton = this.add.button(448, 640, 'ready', readyAction, this, 1, 0, 2);
+        }.bind(this);
     },
 
     update : function()
     {
         if (caracter1)
-            caracter1.move("1");
+            caracter1.move();
 
         if (caracter2) {
-            caracter2.move("2");
+            caracter2.move();
         }
         if (caracter3) {
-            caracter3.move("3");
+            caracter3.move();
         }
         if (caracter4) {
-            caracter4.move("4");
+            caracter4.move();
         }
         if (caracter5) {
-            caracter5.move("5");
+            caracter5.move();
         }
-        paper.game.physics.arcade.overlap(arrowGroup, allies, function(arrow) {
+        paper.game.physics.arcade.overlap(arrowGroup, ennemies, function(arrow, ennemy) {
             arrow.kill();
+            socket.emit('attack', {name: ennemy.name, damage: paper.game.rnd.integerInRange(0.5, 0.1)});
         }, null, this);
     }
 }
