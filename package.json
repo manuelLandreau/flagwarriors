@@ -1,0 +1,27 @@
+{
+  "name": "paper_project",
+  "version": "1.0.0",
+  "description": "phaser game",
+  "main": "server/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manuelLandreau/paper_project.git"
+  },
+  "author": "Manuel Landreau (manuel.landreau@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/manuelLandreau/paper_project/issues"
+  },
+  "homepage": "https://github.com/manuelLandreau/paper_project#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cors": "^2.8.1",
+    "express": "^4.14.0",
+    "http": "0.0.0",
+    "redis": "^2.6.2",
+    "socket.io": "^1.4.8"
+  }
+}
