@@ -92,7 +92,7 @@ var Caracter = function(x, y)
               this.animations.play('west', 10, false);
               anim = 'west';
             }
-            socket.emit('is_moving', {number: number, x: this.x, y: this.x, anim: anim});
+            socket.emit('is_moving', {number: number, x: this.x, y: this.y, anim: anim});
             allies.sort('x', Phaser.Group.SORT_ACENDING);
             allies.sort('y', Phaser.Group.SORT_ACENDING);
           }

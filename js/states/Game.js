@@ -137,8 +137,8 @@ paper.Game.prototype = {
 
         this.ennemyInit = function() {
             socket.on('is_moving', function(data) {
-                window['ennemy' + data.number].x = data.x;
-                window['ennemy' + data.number].y = data.y;
+                window['ennemy' + data.number].x = 480 - data.x;
+                window['ennemy' + data.number].y = 672 - data.y;
                 window['ennemy' + data.number].animations.play(data.anim, 10, false);
             });
         }
