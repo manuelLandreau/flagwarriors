@@ -1,5 +1,4 @@
 function buildWall(pointer) {
-
   tileGroup.forEach(function (tile)
   {
     tile.events.onInputOver.add(makeWall, this);
@@ -25,3 +24,4 @@ function buildWall(pointer) {
     }
   });
 }
+

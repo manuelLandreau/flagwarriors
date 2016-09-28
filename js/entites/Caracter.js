@@ -39,7 +39,8 @@ var Caracter = function(x, y, name)
 
   this.move = function()
   {
-    if (paper.game.physics.arcade.distanceToXY(this, this.newPosX, this.newPosY) > 2)
+    var anim;
+    if (paper.game.physics.arcade.distanceToXY(this, this.newPosX, this.newPosY) > 8)
     {
       this.path.setGrid(map.grid);
       this.path.findPath(
@@ -48,7 +49,7 @@ var Caracter = function(x, y, name)
         Math.round((this.newPosX - 16) / 32),
         Math.round((this.newPosY - 16) / 16),
         function(path) {
-          var currentNextPointX , currentNextPointY, anim;
+          var currentNextPointX , currentNextPointY;
           if (path === null)
           {
             this.body.velocity.x = 0;
@@ -93,7 +94,6 @@ var Caracter = function(x, y, name)
               this.animations.play('west', 10, false);
               anim = 'east';
             }
-            socket.emit('is_moving', {name: this.name, x: this.x, y: this.y, anim: anim});
             allies.sort('x', Phaser.Group.SORT_ACENDING);
             allies.sort('y', Phaser.Group.SORT_ACENDING);
           }
@@ -102,6 +102,7 @@ var Caracter = function(x, y, name)
             this.body.velocity.y = 0;
           }
         }.bind(this));
+      socket.emit('is_moving', {name: this.name, x: this.x, y: this.y, anim: anim});
       this.path.calculate();
     } else {
       this.body.velocity.x = 0;
