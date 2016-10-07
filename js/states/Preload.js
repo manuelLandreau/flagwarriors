@@ -16,12 +16,9 @@ paper.Preload.prototype = {
 
   startLoad: function()
   {
-    this.load.image('warriorButton', 'assets/warriorbutton.png');
-    this.load.image('wallButton', 'assets/walle.png');
-    this.load.image('towerButton', 'assets/towerbutton.png');
-    this.load.image('tree', 'assets/tree.png');
-    this.load.spritesheet('warrior', 'assets/warrior.png', 32, 32);
+    this.load.spritesheet('warrior', 'assets/warrior.png', 32, 32, 40);
     this.load.spritesheet('flags', 'assets/flags.png', 16, 16);
+    this.load.spritesheet('skeleton', 'assets/skeleton.png', 32, 32);
     this.load.image('walle', 'assets/wall2.png');
     this.load.image('tile', 'assets/empty.png');
     this.load.image('tower', 'assets/tower.png');

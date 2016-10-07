@@ -22,7 +22,7 @@ io.on('connection', function(socket)
 {
     console.log(socket.id);
 
-    socket.on('avalable_player', function()
+    socket.on('avalable_player', function(player)
     {
         if (flag) {
             console.log('waiting for a game');
@@ -40,19 +40,19 @@ io.on('connection', function(socket)
     });
 
     socket.on('ready', function(data) {
-        socket.broadcast.emit('ready', data);
+        socket.broadcast.to(data.gameId).emit('ready', data);
     });
 
     socket.on('walls', function(data) {
-        socket.broadcast.emit('walls', data);
+        socket.broadcast.to(data.gameId).emit('walls', data);
     });
 
     socket.on('is_moving', function(data) {
-        socket.broadcast.emit('is_moving', data);
+        socket.broadcast.to(data.gameId).emit('is_moving', data);
     });
 
     socket.on('attack', function(data) {
-        socket.broadcast.emit('attack', data);
+        socket.broadcast.to(data.gameId).emit('attack', data);
     });
 
     // when the user disconnects.. perform this
@@ -62,10 +62,12 @@ io.on('connection', function(socket)
             --numUsers;
 
             // echo globally that this client has left
-            socket.broadcast.emit('user left', {
+            socket.broadcast.to(data.gameId).emit('user left', {
                 username: socket.username,
                 numUsers: numUsers
             });
         }*/
     });
+
+    app.use('/', express.static('../'));
 });

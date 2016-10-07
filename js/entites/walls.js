@@ -12,6 +12,7 @@ function buildWall(pointer) {
         if (tile.walled == false && tile.y > 336) {
           var walle = paper.game.add.sprite(tile.x, tile.y, 'walle');
           paper.game.physics.arcade.enable(walle);
+          walle.anchor.setTo(0.33, 0.5);
           allies.add(walle);
           allies.sort('x', Phaser.Group.SORT_ACENDING);
           allies.sort('y', Phaser.Group.SORT_ACENDING);
