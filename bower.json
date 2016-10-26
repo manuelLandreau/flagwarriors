@@ -1,0 +1,23 @@
+{
+  "name": "flagwarriors",
+  "description": "game",
+  "main": [
+    "index.html"
+  ],
+  "dependencies": {
+    "phaser": "^2.6.2",
+    "easystarjs": "^0.3.0"
+  },
+  "authors": [
+    "Manuel Landreau <manuel.landreau@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "private": true
+}

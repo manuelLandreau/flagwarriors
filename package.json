@@ -1,27 +1,22 @@
 {
-  "name": "paper_project",
+  "name": "flagwarriors",
   "version": "1.0.0",
-  "description": "phaser game",
-  "main": "server/app.js",
+  "description": "",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node app.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/manuelLandreau/paper_project.git"
+    "url": "git+https://manuellandreau@bitbucket.org/manuellandreau/flagwarriors.git"
   },
-  "author": "Manuel Landreau (manuel.landreau@gmail.com)",
+  "author": "manuel landreau",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/manuelLandreau/paper_project/issues"
-  },
-  "homepage": "https://github.com/manuelLandreau/paper_project#readme",
-  "dependencies": {
+  "homepage": "https://bitbucket.org/manuellandreau/flagwarriors#readme",
+  "devDependencies": {
     "body-parser": "^1.15.2",
     "cors": "^2.8.1",
     "express": "^4.14.0",
-    "http": "0.0.0",
-    "redis": "^2.6.2",
-    "socket.io": "^1.4.8"
+    "http": "0.0.0"
   }
 }
