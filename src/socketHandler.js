@@ -6,10 +6,11 @@ try {
 }
 var ennemyData = false;
 
-function readyAction(button) {
+function readyAction(readyButton) {
     readySwitch = true;
     tileGroup.removeAll();
-    button.destroy();
+    readyButton.destroy();
+    undoButton.destroy();
     socket.emit('ready', {
             warriors: [
                 {x: caracter1.x, y: caracter1.y, name: '1'},
@@ -30,9 +31,11 @@ function readyAction(button) {
     if (ennemyData) {
         addEnnemies(ennemyData);
     } else {
-        paper.game.waitText1 = paper.game.add.text(paper.game.world.centerX, paper.game.world.centerY - 32, lang.WAITING_READY, {fill: '#000000', font: 'bold 32px Almendra'});
+        paper.game.waitText1 = paper.game.add.text(paper.game.world.centerX, paper.game.world.centerY - 32, lang.WAITING_READY, {
+            fill: '#000000',
+            font: 'bold 32px Almendra'
+        });
         paper.game.waitText1.anchor.setTo(0.5);
-        // paper.game.paused = true;
     }
 }
 
@@ -49,10 +52,11 @@ socket.on('ready', function (data) {
     if (paper.game.waitText2)
         paper.game.waitText2.destroy();
 
-    paper.game.paused = false;
+    gameOn = true;
 });
 
 function addEnnemies(data) {
+    undoButton.destroy();
     readyButton.destroy();
     data.warriors.forEach(function (warrior) {
         window['ennemy' + warrior.name] = new Ennemy(480 - warrior.x, 800 - warrior.y, warrior.name);
@@ -81,6 +85,7 @@ function addEnnemies(data) {
 
     theirFlag = paper.game.add.sprite(240, 0, 'flags');
     theirFlag.scale.setTo(2);
+    theirFlag.anchor.setTo(0.5, 0.5);
     theirFlag.animations.add('float', [9, 10, 11, 12]);
     theirFlag.animations.play('float', 5, true);
     all.add(theirFlag);
@@ -108,10 +113,56 @@ function addEnnemies(data) {
     });
 
     socket.on('we_have_a_winner', function () {
-        var winner = paper.game.add.text(paper.game.world.centerX, paper.game.world.centerY, lang.LOOSE, {fill: '#000000', font: 'bold 32px Almendra'});
-        winner.anchor.setTo(0.5);
+        var looser = paper.game.add.text(paper.game.world.centerX, paper.game.world.centerY, lang.LOOSE, {
+            fill: '#000000',
+            font: 'bold 32px Almendra'
+        });
+        looser.anchor.setTo(0.5);
+        if (logged) {
+            var body = {
+                token: window.localStorage.getItem('jtw'),
+                victory: false,
+                defeat: true
+            };
+            $.ajax({
+                url: 'http://127.0.0.1:3000/update_ratio',
+                type: 'PUT',
+                data: body,
+                success: function (data) {
+                    user_infos = data.infos;
+                },
+                error: function (err) {
+                }
+            });
+        }
         paper.game.paused = true;
 
+    });
+
+    socket.on('we_have_a_looser', function () {
+        var winner = paper.game.add.text(paper.game.world.centerX, paper.game.world.centerY, lang.WIN, {
+            fill: '#000000',
+            font: 'bold 32px Almendra'
+        });
+        winner.anchor.setTo(0.5);
+        if (logged) {
+            var body = {
+                token: window.localStorage.getItem('jtw'),
+                victory: false,
+                defeat: true
+            };
+            $.ajax({
+                url: 'http://127.0.0.1:3000/update_ratio',
+                type: 'PUT',
+                data: body,
+                success: function (data) {
+                    user_infos = data.infos;
+                },
+                error: function (err) {
+                }
+            });
+        }
+        paper.game.paused = true;
     });
 }
 

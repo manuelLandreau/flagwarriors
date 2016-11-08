@@ -54,7 +54,7 @@ function fightAnimation(caracter, ennemy) {
 
 function swordSound() {
     var rd = Math.random();
-    switch (Math.round(rd*10)) {
+    switch (Math.round(rd * 10)) {
         case 1:
         case 2:
         case 3:

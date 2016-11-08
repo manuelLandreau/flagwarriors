@@ -19,6 +19,20 @@ paper.Preload.prototype = {
         this.scale.setScreenSize;
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
+        //Transistion plugin
+        this.game.stateTransition = this.game.plugins.add(Phaser.Plugin.StateTransition);
+        this.game.stateTransition.configure({
+            duration: Phaser.Timer.SECOND * 0.8,
+            ease: Phaser.Easing.Exponential.InOut,
+            properties: {
+                alpha: 0,
+                scale: {
+                    x: 1.4,
+                    y: 1.4
+                }
+            }
+        });
+
         this.loadText = this.add.text(paper.game.world.centerX / 2, paper.game.world.centerY, 'Chargement...', {fill: '#ffffff'});
         this.load.onFileComplete.add(this.fileComplete, this);
         this.load.onLoadComplete.add(this.loadComplete, this);
@@ -42,6 +56,9 @@ paper.Preload.prototype = {
         this.load.image('paper', 'assets/paper.png');
         this.load.image('start', 'assets/start.png');
         this.load.image('ready', 'assets/contour.png');
+        this.load.image('undo', 'assets/undo.png');
+        this.load.image('grid', 'assets/grid.png');
+        this.load.image('logout', 'assets/logout.png');
         this.load.audio('ambiance', 'assets/ambiance.mp3');
         this.load.audio('start', 'assets/start.mp3');
         this.load.audio('canon', 'assets/canon.mp3');
@@ -61,4 +78,4 @@ paper.Preload.prototype = {
     loadComplete: function () {
         this.state.start('Menu');
     }
-}
+};

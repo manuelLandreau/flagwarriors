@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="chrome=1, IE=9">
-    <meta name="viewport" content="initial-scale=1 maximum-scale=1 user-scalable=0 minimal-ui" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="initial-scale=1 maximum-scale=1 user-scalable=0 minimal-ui"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
     <meta name="apple-mobile-web-app-title" content="Phaser App">
+    <link href='http://fonts.googleapis.com/css?family=Almendra' rel='stylesheet' type='text/css'>
+
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <script src="bower_components/easystarjs/bin/easystar-0.3.0.min.js"></script>
     <script src="bower_components/phaser/build/phaser.min.js"></script>
+    <script src="bower_components/phaser-state-transition-plugin/dist/phaser-state-transition-plugin.min.js"></script>
+    <script src="bower_components/easystarjs/bin/easystar-0.3.0.js"></script>
+    <script src="bower_components/zepto/zepto.min.js"></script>
 
     <title>Paper Phaser</title>
     <style>
@@ -20,6 +24,87 @@
     </style>
 </head>
 <body>
-    <script src="dist/bundle.js"></script>
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '1494374693922923',
+            xfbml      : true,
+            version    : 'v2.8'
+        });
+
+        // ADD ADDITIONAL FACEBOOK CODE HERE
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div id="popup" class="form">
+    <ul class="tab-group">
+        <li class="tab active"><a id="signup-btn" href="#">Sign Up</a></li>
+        <li class="tab"><a id="login-btn" href="#">Log In</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="signup">
+            <h1>Sign Up for Free</h1>
+            <h3 class="server_msg"></h3>
+            <form id="register-form" method="post">
+                <div class="field-wrap">
+                    <label>
+                        Email Address<span class="req">*</span>
+                    </label>
+                    <input id="email" type="email" required autocomplete="off"/>
+                </div>
+                <div class="field-wrap">
+                    <label>
+                        Pseudonyme<span class="req">*</span>
+                    </label>
+                    <input id="pseudo" type="text" required autocomplete="off"/>
+                </div>
+                <div class="field-wrap">
+                    <label>
+                        Set A Password<span class="req">*</span>
+                    </label>
+                    <input id="password1" type="password" required autocomplete="off"/>
+                </div>
+                <div class="field-wrap">
+                    <label>
+                        Retype Password<span class="req">*</span>
+                    </label>
+                    <input id="password2" type="password" required autocomplete="off"/>
+                </div>
+                <button type="submit" class="button button-block"/>
+                Get Started</button>
+            </form>
+        </div>
+        <div id="login">
+            <h1>Welcome Back!</h1>
+            <h3 class="server_msg"></h3>
+            <form id="login-form" method="post">
+                <div class="field-wrap">
+                    <label>
+                        Email Address<span class="req">*</span>
+                    </label>
+                    <input id="login-mail" type="email" required autocomplete="off"/>
+                </div>
+                <div class="field-wrap">
+                    <label>
+                        Password<span class="req">*</span>
+                    </label>
+                    <input id="password" type="password" required autocomplete="off"/>
+                </div>
+                <p class="forgot"><a href="#">Forgot Password?</a></p>
+                <button class="button button-block"/>
+                Log In</button>
+            </form>
+        </div>
+    </div><!-- tab-content -->
+</div> <!-- /form -->
+<script src="dist/bundle.js"></script>
 </body>
 </html>

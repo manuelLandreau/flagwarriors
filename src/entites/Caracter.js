@@ -37,7 +37,7 @@ var Caracter = function (x, y, name) {
     this.events.onInputDown.add(this.select, this);
 
     paper.game.input.onUp.add(function (pointer) {
-        if (this.selected && pointer.x < 477 && pointer.y < 797 && pointer.x > 3 && pointer.y > 3) {
+        if (gameOn && this.selected && pointer.x < 477 && pointer.y < 797 && pointer.x > 3 && pointer.y > 3) {
             this.newPosX = pointer.x;
             this.newPosY = pointer.y;
 
@@ -114,20 +114,47 @@ var Caracter = function (x, y, name) {
         this.health -= lp;
         if (this.health < 0) {
             if (this.alive)
-                this.kill();
+                deadWarior++;
+            this.kill();
             socket.emit('death', {name: this.name, gameId: gameId});
+            if (deadWarior > 5) {
+                socket.emit('we_have_a_looser', {gameId: gameId});
+                var looser = paper.game.add.text(paper.game.world.centerX, paper.game.world.centerY, lang.LOOSE, {
+                    fill: '#000000',
+                    font: 'bold 32px Almendra'
+                });
+                looser.anchor.setTo(0.5);
+                if (logged) {
+                    var body = {
+                        token: window.localStorage.getItem('jtw'),
+                        victory: false,
+                        defeat: true
+                    };
+                    $.ajax({
+                        url: 'http://127.0.0.1:3000/update_ratio',
+                        type: 'PUT',
+                        data: body,
+                        success: function (data) {
+                            user_infos = data.infos;
+                        },
+                        error: function (err) {
+                        }
+                    });
+                }
+                paper.game.paused = true;
+            }
         }
     };
 
     this.events.onKilled.add(function () {
         socket.emit('death', {name: this.name, gameId: gameId});
         var skeleton = paper.game.add.sprite(this.x, this.y, 'skeleton');
-        this.x = 0;
-        this.y = 400;
         skeleton.anchor.setTo(0.5, 0.5);
         all.add(skeleton);
         skeleton.animations.add('death', [40, 41, 42, 43, 44, 45, 46, 47, 48, 49]);
         skeleton.animations.play('death', 10, false);
+        this.x = 0;
+        this.y = 800;
     }, this);
 };
 

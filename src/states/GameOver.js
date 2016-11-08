@@ -14,4 +14,4 @@ paper.GameOver.prototype = {
 
     update: function () {
     }
-}
+};

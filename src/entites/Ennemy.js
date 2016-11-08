@@ -44,7 +44,7 @@ var Ennemy = function (x, y, name) {
 
                     // Set obstacle on the caracter
                     // if (this.pathx != path[0].x || this.pathy != path[0].y)
-                        // map.caracterObstacle(this.pathx, this.pathy, 0);
+                    // map.caracterObstacle(this.pathx, this.pathy, 0);
                     // map.caracterObstacle(path[0].x, path[0].y, 1);
 
                     walkAnimation(this, path[0].x, path[1].x, path[0].y, path[1].y);
@@ -71,11 +71,11 @@ var Ennemy = function (x, y, name) {
 
     this.events.onKilled.add(function () {
         var skeleton = paper.game.add.sprite(this.x, this.y, 'skeleton');
-        this.x = 0;
-        this.y = 400;
         skeleton.anchor.setTo(0.5, 0.5);
         skeleton.animations.add('death', [40, 41, 42, 43, 44, 45, 46, 47, 48, 49]);
         skeleton.animations.play('death', 10, false);
+        this.x = 0;
+        this.y = 800;
     }, this);
 };
 

@@ -11,7 +11,11 @@
     "easystar"
   ],
   "authors": [
-    { "name": "Bryce Neal", "email": "brycedneal@gmail.com", "homepage": "http://bryce.is" }
+    {
+      "name": "Bryce Neal",
+      "email": "brycedneal@gmail.com",
+      "homepage": "http://bryce.is"
+    }
   ],
   "license": "MIT",
   "ignore": [

@@ -1,6 +1,5 @@
 paper.Menu = function () {
 };
-var button, start, ambiance, langButton, soundFlag = true;
 
 paper.Menu.prototype = {
 
@@ -20,21 +19,39 @@ paper.Menu.prototype = {
         langButton = paper.game.add.text(10, 7, lang.LANGUAGE, {fill: '#000000', font: 'bold 20px Almendra'});
         paper.game.physics.arcade.enable(langButton);
         langButton.inputEnabled = true;
+        button.anchor.setTo(0.5);
         langButton.events.onInputDown.add(function () {
-            this.state.start('Language');
+            this.game.stateTransition.to('Language');
         }, this);
+        if (!user_infos) {
+            loginButton = paper.game.add.text(paper.game.world.centerX, paper.game.world.centerY + 70, lang.CONNECTION, {fill: '#000000', font: 'bold 20px Almendra'});
+            paper.game.physics.arcade.enable(loginButton);
+            loginButton.inputEnabled = true;
+            loginButton.anchor.setTo(0.5);
+            loginButton.events.onInputDown.add(function () {
+                this.state.start('Login');
+            }, this);
+        } else {
+            logoutButton = this.add.button(400, 8, 'logout', function () {
+                this.game.stateTransition.to('Logout');
+            }, this);
+            logoutButton.scale.setTo(0.20);
+            var ratio = ((1/user_infos.defeats*user_infos.victories)*10|0)/10;
+            this.userHi = paper.game.add.text(50, 100, lang.HI + user_infos.pseudo, {fill: '#000000', font: 'bold 20px Almendra'});
+            this.userRatio = paper.game.add.text(50, 140, lang.RATIO + ratio, {fill: '#000000', font: 'bold 20px Almendra'});
+        }
 
         var soundButton = this.add.button(440, 5, 'sound', function () {
             if (sound) {
                 paper.game.sound.stopAll();
                 this.play('off');
                 sound = false;
-                sessionStorage.setItem('sound', 'off');
+                window.localStorage.setItem('sound', 'off');
             } else {
                 ambiance.play();
                 this.play('on');
                 sound = true;
-                sessionStorage.setItem('sound', 'on');
+                window.localStorage.setItem('sound', 'on');
             }
 
         }, soundButton);
@@ -56,20 +73,26 @@ paper.Menu.prototype = {
             console.log('game id: ' + data.gameId);
             gameId = data.gameId;
             if (data.gameOn) {
-                this.state.start('Game');
+                this.game.stateTransition.to('Game', true, false);
             }
         }.bind(this));
 
         button.destroy();
-        langButton.text = "";
-        var waitText = paper.game.add.text(paper.game.world.centerX, paper.game.world.centerY, lang.WAITING_MENU, {fill: '#000000', font: 'bold 32px Almendra'});
+        if (logoutButton) logoutButton.destroy();
+        langButton.text = '';
+        if (this.userHi) this.userHi.text = '';
+        if (this.userRatio) this.userRatio.text = '';
+        var waitText = paper.game.add.text(paper.game.world.centerX, paper.game.world.centerY, lang.WAITING_MENU, {
+            fill: '#000000',
+            font: 'bold 32px Almendra'
+        });
         waitText.anchor.setTo(0.5);
         socket.on('game_on', function () {
-            this.state.start('Game');
+            this.game.stateTransition.to('Game', true, false);
         }.bind(this));
 
         ambiance.stop();
         if (sound)
             start.play();
     }
-}
+};

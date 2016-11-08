@@ -1,9 +1,3 @@
-var map, all, ennemies, allies, tileGroup, arrows, wallSwitch = false;
-var caracter1, caracter2, caracter3, caracter4, caracter5, tower1, tower2;
-var ennemy1, ennemy2, ennemy3, ennemy4, ennemy5, ennemyTower1, ennemyTower2, explosions;
-var wallCount = 0, wallButton, wallsArray = [], undo, sword1, sword2, pare;
-var theirFlag = {x: 0, y: 0}, ourFlag, readyCheck, readyButton, readySwitch = false;
-
 paper.Game = function () {
 };
 
@@ -48,7 +42,7 @@ paper.Game.prototype = {
         //buttons
         var warriorButton = this.add.image(-16, 772, 'warrior');
         warriorButton.scale.setTo(2);
-        wallButton = this.add.button(49, 772, 'walle', wallAction, this, 1, 0, 2);
+        wallButton = this.add.button(49, 772, 'walle', wallAction);
         var towerButton = this.add.image(96, 772, 'tower');
 
         // Drag buttons
@@ -57,20 +51,20 @@ paper.Game.prototype = {
         warriorDrag.scale.setTo(2);
         warriorDrag.inputEnabled = true;
         warriorDrag.input.enableDrag();
-        warriorDrag.events.onDragStart.add(unselect, this);
-        warriorDrag.events.onDragUpdate.add(onDragTower, this);
+        warriorDrag.events.onDragStart.add(spriteDragStart, this);
+        warriorDrag.events.onDragUpdate.add(onDragSprite, this);
         warriorDrag.events.onDragStop.add(addWarrior, this);
 
         var towerDrag = this.add.image(120, 812, 'tower');
         towerDrag.anchor.setTo(0.5, 0.5);
         towerDrag.inputEnabled = true;
         towerDrag.input.enableDrag();
-        towerDrag.events.onDragStart.add(unselect, this);
-        towerDrag.events.onDragUpdate.add(onDragTower, this);
+        towerDrag.events.onDragStart.add(spriteDragStart, this);
+        towerDrag.events.onDragUpdate.add(onDragSprite, this);
         towerDrag.events.onDragStop.add(addTower, this);
 
-        function onDragTower(sprite) {
-            if (sprite.y < 384) {
+        function onDragSprite(sprite) {
+            if (sprite.y < 384 || sprite.y > 750) {
                 sprite.tint = 0xFF7F50;
             } else {
                 sprite.tint = 0xFFFFFF;
@@ -78,7 +72,10 @@ paper.Game.prototype = {
         }
 
         // Caracter selection handler
-        function unselect() {
+        function spriteDragStart() {
+            tileGroup.forEach(function (tile) {
+                tile.alpha = 0.3;
+            });
             allies.forEach(function (caracter) {
                 caracter.selected = false;
             }, this);
@@ -89,10 +86,10 @@ paper.Game.prototype = {
 
         function addWarrior(pointer) {
             if (pointer.y > 384) {
-                window['caracter' + i] = new Caracter(Math.floor(pointer.x / 32) * 32 + 16, Math.floor(pointer.y / 32) * 32 + 16, i);
+                window['caracter' + i] = new Caracter(((pointer.x / 32) | 0) * 32 + 16, ((pointer.y / 32) | 0) * 32 + 16, i); // Bitwise
                 window['caracter' + i].selected = true;
                 all.sort('y', Phaser.Group.SORT_ACENDING);
-
+                undo.push({type: 'caracter', name: i});
                 i++;
                 warriorDrag.x = 16;
                 warriorDrag.y = 804;
@@ -102,15 +99,22 @@ paper.Game.prototype = {
                     warriorButton.kill();
                     readyCheck();
                 }
-                undo = window['caracter' + i];
-            }else {
+            } else {
                 warriorDrag.x = 16;
                 warriorDrag.y = 804;
                 warriorDrag.tint = '0xFFFFFF';
             }
+
+            tileGroup.forEach(function (tile) {
+                tile.alpha = 0;
+            });
         }
 
         function addTower(pointer) {
+            tileGroup.forEach(function (tile) {
+                tile.alpha = 0;
+            });
+
             if (pointer.y > 384) {
                 window['tower' + j] = new Tower(Math.round(pointer.x / 32) * 32, Math.round(pointer.y / 32) * 32, j, ennemies);
                 allies.push(window['tower' + j]);
@@ -118,6 +122,7 @@ paper.Game.prototype = {
                 all.sort('y', Phaser.Group.SORT_ACENDING);
                 map.setObstacle(Math.round(pointer.x / 32) * 32, Math.round(pointer.y / 32) * 32);
                 window['tower' + j].arrowAttack;
+                undo.push({type: 'tower', name: j});
                 j++;
                 towerDrag.x = 120;
                 towerDrag.y = 812;
@@ -127,7 +132,6 @@ paper.Game.prototype = {
                     towerDrag.kill();
                     towerButton.kill();
                 }
-                undo = window['tower' + j];
             } else {
                 towerDrag.x = 120;
                 towerDrag.y = 812;
@@ -137,18 +141,58 @@ paper.Game.prototype = {
 
         function wallAction() {
             wallSwitch = !wallSwitch;
-            if (wallSwitch)
-                this.input.addMoveCallback(map.buildWall, this);
+            if (wallSwitch) {
+                tileGroup.forEach(function (tile) {
+                    tile.alpha = 0.3;
+                });
+                wallButton.tint = '0x00FF00';
+                paper.game.input.addMoveCallback(map.buildWall, this);
+            } else {
+                tileGroup.forEach(function (tile) {
+                    tile.alpha = 0;
+                });
+                wallButton.tint = '0xFFFFFF';
+            }
         }
+
         readyCheck = function () {
             if (wallCount > 13 && i > 5 && j > 2) {
-                console.log('pass');
                 readyButton = this.add.button(416, 768, 'ready', readyAction);
-            } else {
-                console.log('pass pas')
             }
-
         }.bind(this);
+
+        // Undo button handleler
+        undoButton = this.add.button(350, 770, 'undo', function () {
+            if (undo.length > 0) {
+                if (readyButton) readyButton.destroy();
+                var obj = undo.pop();
+                switch (obj.type) {
+                    case 'tower':
+                        window['tower' + obj.name].destroy();
+                        if (!towerDrag.alive) towerDrag.revive();
+                        if (!towerButton.alive) towerButton.revive();
+                        j--;
+                        wallAction();
+                        break;
+                    case 'walle':
+                        window['walle' + obj.name].destroy();
+                        if (!wallButton.alive) {
+                            wallButton.revive();
+                            wallAction();
+                        }
+                        wallGroup.createMultiple(1, 'walle');
+                        wallCount--;
+                        break;
+                    case 'caracter':
+                        window['caracter' + obj.name].destroy();
+                        if (!warriorDrag.alive) warriorDrag.revive();
+                        if (!warriorButton.alive) warriorButton.revive();
+                        i--;
+                        wallAction();
+                        break;
+                }
+            }
+        });
     },
 
     update: function () {
@@ -168,7 +212,10 @@ paper.Game.prototype = {
 
         if (this.physics.arcade.distanceToXY(theirFlag, 240, 774) < 16) {
             socket.emit('we_have_a_winner', {gameId: gameId});
-            var winner = this.add.text(paper.game.world.centerX, paper.game.world.centerY, lang.WIN, {fill: '#000000', font: 'bold 32px Almendra'});
+            var winner = this.add.text(paper.game.world.centerX, paper.game.world.centerY, lang.WIN, {
+                fill: '#000000',
+                font: 'bold 32px Almendra'
+            });
             winner.anchor.setTo(0.5);
             paper.game.paused = true;
         }

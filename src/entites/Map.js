@@ -3,7 +3,7 @@ var Map = function (game, group) {
     this.game = game;
     this.group = group;
 
-    var wallGroup = paper.game.add.group();
+    wallGroup = paper.game.add.group();
     wallGroup.createMultiple(14, 'walle');
     wallGroup.forEach(function (wall) {
         wall.anchor.setTo(0.33, 0.5);
@@ -20,9 +20,10 @@ var Map = function (game, group) {
 
     this.spawnTiles = function () {
         for (var xt = 0; xt < 16 * 32; xt += 32) {
-            for (var yt = 0; yt < 54 * 16; yt += 16) {
-                var tile = this.game.add.sprite(xt, yt, 'tile', 0, this.group);
+            for (var yt = 400; yt < 54 * 16; yt += 16) {
+                var tile = this.game.add.image(xt, yt, 'grid', 0, this.group);
                 tile.anchor.setTo(0.5);
+                tile.alpha = 0;
                 tile.inputEnabled = true;
                 tile.walled = false;
             }
@@ -45,6 +46,9 @@ var Map = function (game, group) {
                     wallButton.kill();
                     readyCheck();
                     wallSwitch = false;
+                    tileGroup.forEach(function(tile) {
+                        tile.alpha = 0;
+                    });
                 }
                 if (wallCount < 14 && pointer.isDown && wallSwitch == true) {
                     if (tile.walled == false && tile.y > 384 && tile.y < 752) {
@@ -54,12 +58,12 @@ var Map = function (game, group) {
                         all.add(window['walle' + wallCount]);
                         all.sort('x', Phaser.Group.SORT_ACENDING);
                         all.sort('y', Phaser.Group.SORT_ACENDING);
+                        undo.push({type: 'walle', name: wallCount});
                         // allies.push(window['walle' + wallCount]); // Later
                         wallCount++;
                         tile.walled = true;
                         map.setObstacle(tile.x, tile.y);
                         wallsArray.push({x: tile.x, y: tile.y, name: wallCount});
-                        //undo = window['walle' + wallCount];
                     }
                 }
             }
