@@ -30,7 +30,7 @@ if (window.localStorage.getItem('jtw') != null) {
         token: window.localStorage.getItem('jtw')
     };
     $.ajax({
-        url: 'http://127.0.0.1:3000/refresh',
+        url: '/refresh',
         type: 'POST',
         data: body,
         success: function (data) {

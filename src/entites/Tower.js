@@ -30,7 +30,7 @@ var Tower = function (x, y, name, ennemyGroup) {
                     if (this.ennemies == ennemies)
                         socket.emit('attack', {
                             name: ennemy.name,
-                            damage: paper.game.rnd.integerInRange(14, 22),
+                            damage: paper.game.rnd.integerInRange(8, 15),
                             gameId: gameId
                         });
                     arrow.kill();

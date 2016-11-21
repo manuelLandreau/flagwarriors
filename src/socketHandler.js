@@ -77,13 +77,13 @@ function addEnnemies(data) {
         window['wallen' + wall.name].anchor.setTo(0.5, 0.5);
         // ennemies.push(window['wallen' + tower.name]); // Later
         all.add(window['wallen' + wall.name]);
-        ennemies.sort('x', Phaser.Group.SORT_ACENDING);
-        ennemies.sort('y', Phaser.Group.SORT_ACENDING);
+        all.sort('x', Phaser.Group.SORT_ACENDING);
+        all.sort('y', Phaser.Group.SORT_ACENDING);
         window['wallen' + wall.name].body.immovable = true;
         map.setObstacle(480 - wall.x, 800 - wall.y);
     });
 
-    theirFlag = paper.game.add.sprite(240, 0, 'flags');
+    theirFlag = paper.game.add.sprite(240, 24, 'flags');
     theirFlag.scale.setTo(2);
     theirFlag.anchor.setTo(0.5, 0.5);
     theirFlag.animations.add('float', [9, 10, 11, 12]);
@@ -125,7 +125,7 @@ function addEnnemies(data) {
                 defeat: true
             };
             $.ajax({
-                url: 'http://127.0.0.1:3000/update_ratio',
+                url: '/update_ratio',
                 type: 'PUT',
                 data: body,
                 success: function (data) {
@@ -152,7 +152,7 @@ function addEnnemies(data) {
                 defeat: true
             };
             $.ajax({
-                url: 'http://127.0.0.1:3000/update_ratio',
+                url: '/update_ratio',
                 type: 'PUT',
                 data: body,
                 success: function (data) {

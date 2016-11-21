@@ -8,7 +8,9 @@
     "easystarjs": "^0.3.0",
     "phaser-state-transition-plugin": "^0.1.6",
     "zepto": "^1.1.6",
-    "phaser": "^2.6.2"
+    "phaser": "^2.6.2",
+    "requirejs": "^2.3.2",
+    "socket.io": "^1.5.1"
   },
   "authors": [
     "Manuel Landreau <manuel.landreau@gmail.com>"

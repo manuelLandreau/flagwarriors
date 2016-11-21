@@ -34,9 +34,13 @@ module.exports = {
     },
     plugins: [
         definePlugin,
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        // new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        // new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.OccurenceOrderPlugin(true),
+        new webpack.optimize.CommonsChunkPlugin('common.js'),
         new webpack.optimize.UglifyJsPlugin({
             drop_console: true,
+            mangle: true,
             minimize: true,
             output: {
                 comments: false
@@ -44,9 +48,7 @@ module.exports = {
             compress: {
                 warnings: false
             }
-        }),
-        new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.optimize.DedupePlugin()
+        })
     ],
     module: {
         loaders: [

@@ -92,7 +92,7 @@ var Caracter = function (x, y, name) {
             if (ennemy.alive && paper.game.physics.arcade.distanceBetween(this, ennemy) < 32) {
                 socket.emit('attack', {
                     name: ennemy.name,
-                    damage: paper.game.rnd.integerInRange(4, 10),
+                    damage: paper.game.rnd.integerInRange(2, 6),
                     gameId: gameId
                 });
                 fightAnimation(this, ennemy);
@@ -131,7 +131,7 @@ var Caracter = function (x, y, name) {
                         defeat: true
                     };
                     $.ajax({
-                        url: 'http://127.0.0.1:3000/update_ratio',
+                        url: '/update_ratio',
                         type: 'PUT',
                         data: body,
                         success: function (data) {

@@ -80,6 +80,7 @@ paper.Menu.prototype = {
         button.destroy();
         if (logoutButton) logoutButton.destroy();
         langButton.text = '';
+        loginButton.text = '';
         if (this.userHi) this.userHi.text = '';
         if (this.userRatio) this.userRatio.text = '';
         var waitText = paper.game.add.text(paper.game.world.centerX, paper.game.world.centerY, lang.WAITING_MENU, {

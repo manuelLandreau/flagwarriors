@@ -54,7 +54,7 @@ $('#login-form').on('submit', function (e)  {
         password: $('#password').val()
     };
     $.ajax({
-        url: 'http://127.0.0.1:3000/login',
+        url: '/login',
         type: 'POST',
         data: body,
         success: function (data) {
@@ -88,7 +88,7 @@ $('#register-form').on('submit', function(e) {
         password2: $('#password2').val()
     };
     $.ajax({
-        url: 'http://127.0.0.1:3000/register',
+        url: '/register',
         type: 'POST',
         data: body,
         success: function (data) {
