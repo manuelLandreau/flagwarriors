@@ -6,7 +6,7 @@ I won't update it anymore but you can be inspired by it.
 
 Demo [here](https://flagwarriors.herokuapp.com)
 
-## package: 
+## packages: 
 * phaser
 * easystar (path finding)
 * multi player (2p)
