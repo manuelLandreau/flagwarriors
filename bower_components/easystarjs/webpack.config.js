@@ -3,7 +3,7 @@ var config = require('./package.json');
 
 var minify = process.argv.indexOf('--minify') !== -1;
 
-var filename = 'easystar-' + config.version
+var filename = 'easystar-' + config.version;
 if (minify) {
     filename += '.min.js';
 } else {

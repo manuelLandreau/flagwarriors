@@ -9,14 +9,14 @@
 
 	var Radio = function (element, options) {
 		this.init(element, options);
-	}
+    };
 
 	Radio.prototype = {
 	
 		constructor: Radio
 		
-	, init: function (element, options) {			 
-			var $el = this.$element = $(element)
+	, init: function (element, options) {
+            var $el = this.$element = $(element);
 			
 			this.options = $.extend({}, $.fn.radio.defaults, options);			
 			$el.before(this.options.template);		
@@ -39,7 +39,7 @@
 				, $parent = $el.closest('.radio')			 
 				, $parentWrap = $el.closest('form').length ? $el.closest('form') : $el.closest('body')
 				, $elemGroup = $parentWrap.find(':radio[name="' + $el.attr('name') + '"]')
-				, e = $.Event('toggle')
+                , e = $.Event('toggle');
 				
 				$elemGroup.not($el).each(function () {
 					var $el = $(this)
@@ -68,7 +68,7 @@
 				, checked = $el.prop(ch)
 				, $parentWrap = $el.closest('form').length ? $el.closest('form') : $el.closest('body')
 				, $elemGroup = $parentWrap.find(':radio[name="' + $el['attr']('name') + '"]')
-				, e = $.Event(option)
+                , e = $.Event(option);
 				
 			$elemGroup.not($el).each(function () {
 				var $el = $(this)
@@ -83,15 +83,15 @@
 			if (checked !== $el.prop(ch)) {
 				$el.trigger('change'); 
 			}
-		}	 
-		 
-	}
+		}
+
+    };
 
 
  /* RADIO PLUGIN DEFINITION
 	* ======================== */
 
-	var old = $.fn.radio
+    var old = $.fn.radio;
 
 	$.fn.radio = function (option) {
 		return this.each(function () {
@@ -99,15 +99,15 @@
 				, data = $this.data('radio')
 				, options = $.extend({}, $.fn.radio.defaults, $this.data(), typeof option == 'object' && option);
 			if (!data) $this.data('radio', (data = new Radio(this, options)));
-			if (option == 'toggle') data.toggle()
-			if (option == 'check' || option == 'uncheck') data.setCheck(option)
+            if (option == 'toggle') data.toggle();
+            if (option == 'check' || option == 'uncheck') data.setCheck(option);
 			else if (option) data.setState(); 
 		});
-	}
+    };
 	
 	$.fn.radio.defaults = {
 		template: '<span class="icons"><span class="first-icon fui-radio-unchecked"></span><span class="second-icon fui-radio-checked"></span></span>'
-	}
+    };
 
 
  /* RADIO NO CONFLICT
@@ -116,7 +116,7 @@
 	$.fn.radio.noConflict = function () {
 		$.fn.radio = old;
 		return this;
-	}
+    };
 
 
  /* RADIO DATA-API

@@ -132,7 +132,7 @@ var EasyStarDemo = function(width, height) {
 	this.unsetGrassPreference = function() {
 		preferGrass = false;
 		this.resize(displayWidth, displayHeight); //reset		
-	}
+    };
 
 	this.enableDiagonals = function() {
 		diagonalsAllowed = true;
@@ -210,7 +210,7 @@ var EasyStarDemo = function(width, height) {
 		hero.x = startX;
 		hero.y = startY;
 		heroes.push(hero);
-	}
+    };
 
 	var populateBoardWithHeroes = function() {
 		for (var i = 0; i < heroes.length; i++) {
@@ -226,7 +226,7 @@ var EasyStarDemo = function(width, height) {
 				}
 			}
 		}
-	}
+    };
 
 	var createBoardSprite = function(texture, container, posX, posY) {
 		var sprite = new PIXI.Sprite(texture);
@@ -337,7 +337,7 @@ var EasyStarDemo = function(width, height) {
 			},100);
 			intervals[id] = true;
 		});
-	}
+    };
 
 	var update = function() {
 		renderer.render(stage);

@@ -36,8 +36,8 @@ module.exports = {
         definePlugin,
         // new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         // new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.OccurenceOrderPlugin(true),
-        new webpack.optimize.CommonsChunkPlugin('common.js'),
+        new webpack.optimize.OccurrenceOrderPlugin(true),
+        //new webpack.optimize.CommonsChunkPlugin('common.js'),
         new webpack.optimize.UglifyJsPlugin({
             drop_console: true,
             mangle: true,
@@ -56,4 +56,4 @@ module.exports = {
             {test: /\.css$/, loader: 'css-loader', include: path.join(__dirname, 'css')}
         ]
     }
-}
+};

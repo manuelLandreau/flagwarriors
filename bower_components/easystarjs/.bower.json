@@ -1,9 +1,9 @@
 {
   "name": "easystarjs",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": "https://github.com/prettymuchbryce/easystarjs",
   "description": "Asynchronous A* Pathfinding API",
-  "main": "./bin/easystar-0.3.0.min.js",
+  "main": "./bin/easystar-0.3.1.min.js",
   "keywords": [
     "A*",
     "pathfinding",
@@ -25,14 +25,13 @@
     "test",
     "tests"
   ],
-  "_release": "0.3.0",
+  "_release": "0.3.1",
   "_resolution": {
     "type": "version",
-    "tag": "v0.3.0",
-    "commit": "adbdfd649c201e2073d64060b0c88f73e143741f"
+    "tag": "v0.3.1",
+    "commit": "3d258327700b1f732b5a203725609113cc4d983c"
   },
   "_source": "https://github.com/prettymuchbryce/easystarjs.git",
   "_target": "^0.3.0",
-  "_originalSource": "easystarjs",
-  "_direct": true
+  "_originalSource": "easystarjs"
 }
